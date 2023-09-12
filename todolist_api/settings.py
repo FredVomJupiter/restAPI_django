@@ -28,7 +28,13 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'frederi1c.pythonanywhere.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    ]
+
+# CORS settings
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:4200'
     ]
 
 
@@ -41,12 +47,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'todo',
     'rest_framework',
     'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # added for CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
