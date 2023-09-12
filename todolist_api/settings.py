@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'todo',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,11 @@ MEDIA_ROOT = '/home/frederi1c/todolist_api/media'
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/frederi1c/todolist_api/static'
 STATIC_URL = '/static/'
+
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
