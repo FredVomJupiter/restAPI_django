@@ -7,14 +7,27 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 
 
 # Create your views here.
 class TodoViewSet(viewsets.ModelViewSet):
     # API endpoint that allows todos to be viewed or edited.
-    queryset = Todo.objects.all().order_by('-created_at')
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
+    queryset = Todo.objects.all().order_by('-created_at')
+
+    
+
+    def list(self, request, *args, **kwargs):
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        # Get all todos for the current user
+        queryset = Todo.objects.filter(user_id=request.user).order_by('-created_at')
+        serializer = TodoSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
     def perform_create(self, serializer):
