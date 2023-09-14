@@ -17,7 +17,8 @@ class TodoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Todo.objects.all().order_by('-created_at')
     
-    # cRud
+
+    # cRud to list all todos for the current user
     def list(self, request, *args, **kwargs):
         # Check if user is authenticated
         if not request.user.is_authenticated:
@@ -27,7 +28,8 @@ class TodoViewSet(viewsets.ModelViewSet):
         serializer = TodoSerializer(queryset, many=True)
         return Response(serializer.data)
     
-     # Crud
+
+    # Crud to create a todo
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -40,7 +42,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-        # crUd
+    # crUd to update a todo
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -53,7 +55,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-     # cruD
+    # cruD to delete a todo
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.user_id != request.user.id:
