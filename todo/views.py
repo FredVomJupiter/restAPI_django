@@ -10,16 +10,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 
 
-# Create your views here.
 class TodoViewSet(viewsets.ModelViewSet):
     # API endpoint that allows todos to be viewed or edited.
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Todo.objects.all().order_by('-created_at')
-
     
-
+    # cRud
     def list(self, request, *args, **kwargs):
         # Check if user is authenticated
         if not request.user.is_authenticated:
@@ -28,19 +26,43 @@ class TodoViewSet(viewsets.ModelViewSet):
         queryset = Todo.objects.filter(user_id=request.user).order_by('-created_at')
         serializer = TodoSerializer(queryset, many=True)
         return Response(serializer.data)
-
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
+    
+     # Crud
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+        # crUd
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        if instance.user_id != request.user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+     # cruD
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user_id != request.user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+   
 
 class LoginView(ObtainAuthToken):
     # API endpoint that allows users to login and receive a token.
