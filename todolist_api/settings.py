@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
 # CORS settings
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'http://localhost:4200'
+    'http://localhost:4200',
+    'https://api.frederic-rieg.de'
     ]
 
 
