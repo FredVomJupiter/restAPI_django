@@ -16,15 +16,15 @@ class Priority(models.Model):
     Medium = 'Medium'
     High = 'High'
 
-    PRIORITIES = (
-        (Low, 'Low'),
-        (Medium, 'Medium'),
-        (High, 'High'),
-    )
+    PRIORITIES = {
+        Low, 'Low',
+        Medium, 'Medium',
+        High, 'High',
+    }
 
     name = models.CharField(max_length=6,
                             choices=PRIORITIES,
-                            default='Low')
+                            default=Low)
 
     def __str__(self):
         return f'({self.id}) {self.name}'
