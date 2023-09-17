@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from todo.models import Category, Contact, Priority, Subtask, Todo
-from todo.serializers import CategorySerializer, ContactSerializer, PrioritySerializer, SubtaskSerializer, TodoSerializer
+from todo.models import Category, Contact, Subtask, Todo
+from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
@@ -109,13 +109,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class PriorityViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    serializer_class = PrioritySerializer
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Priority.objects.all().order_by('-name')
 
 
 class SubtaskViewSet(viewsets.ModelViewSet):
