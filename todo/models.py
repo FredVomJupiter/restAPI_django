@@ -12,11 +12,15 @@ class Category(models.Model):
     
 
 class Priority(models.Model):
-    PRIORITIES = (
-        ('Low', 'Low'),
-        ('Medium', 'Medium'),
-        ('High', 'High'),
-    )
+    Low = 'Low'
+    Medium = 'Medium'
+    High = 'High'
+
+    PRIORITIES = [
+        (Low, 'Low'),
+        (Medium, 'Medium'),
+        (High, 'High'),
+    ]
 
     name = models.CharField(max_length=6,
                             choices=PRIORITIES,
