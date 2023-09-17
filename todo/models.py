@@ -17,9 +17,9 @@ class Priority(models.Model):
     High = 'High'
 
     PRIORITIES = {
-        Low, 'Low',
-        Medium, 'Medium',
-        High, 'High',
+        (Low, 'Low'),
+        (Medium, 'Medium'),
+        (High, 'High'),
     }
 
     name = models.CharField(max_length=6,
