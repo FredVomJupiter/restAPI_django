@@ -38,6 +38,7 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     category = CategorySerializer(read_only=True)
     assigned_to = ContactSerializer(read_only=True, many=True)
     subtask = SubtaskSerializer(read_only=True, many=True)
+    priority = PrioritySerializer(read_only=True)
 
     class Meta:
         model = Todo
