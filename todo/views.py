@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from todo.models import Category, Contact, Subtask, Todo
-from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer
+from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer, UserSerializer
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
@@ -217,3 +217,13 @@ class LoginView(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+    
+
+class LoggedUserView(viewsets.APIView):
+    # API endpoint that allows users to get their own data.
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
