@@ -8,7 +8,7 @@ router.register(r'v1/todos', TodoViewSet, basename='todos')
 router.register(r'v1/categories', CategoryViewSet, basename='categories')
 router.register(r'v1/subtasks', SubtaskViewSet, basename='subtasks')
 router.register(r'v1/contacts', ContactViewSet, basename='contacts')
-router.register(r'v1/user', LoggedUserView, basename='user')
+router.register(r'v1/user', LoggedUserView.as_view(), basename='user')
 
 
 urlpatterns = [
