@@ -3,7 +3,8 @@ from django.shortcuts import render
 from todo.models import Category, Contact, Subtask, Todo
 from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer, UserSerializer
 
-from rest_framework import viewsets, permissions, status, views
+from rest_framework import viewsets, permissions, status
+from rest_framework.views import APIView 
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -219,7 +220,7 @@ class LoginView(ObtainAuthToken):
         })
     
 
-class LoggedUserView(views.APIView):
+class LoggedUserView(APIView):
     # API endpoint that allows users to get their own data.
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
