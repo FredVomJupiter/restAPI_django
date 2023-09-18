@@ -3,7 +3,6 @@ from django.conf import settings
 from django.db import models
 
 class Category(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -41,7 +40,6 @@ class Subtask(models.Model):
 
 
 class Contact(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=100)
@@ -56,7 +54,7 @@ class Todo(models.Model):
     description = models.TextField(max_length=500)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=django.utils.timezone.now)
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, default=None)
+    category = models.ForeignKey('Category', on_delete=models.PROTECT)
     priority = models.ForeignKey('Priority', on_delete=models.SET_DEFAULT, default=1)
     due_date = models.DateTimeField(default=django.utils.timezone.now)
     assigned_to = models.ManyToManyField('Contact', symmetrical=False, related_name='assigned_to')
