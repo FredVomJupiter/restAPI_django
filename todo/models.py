@@ -54,7 +54,7 @@ class Todo(models.Model):
     description = models.TextField(max_length=500)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=django.utils.timezone.now)
-    category = models.ForeignKey('Category', on_delete=models.PROTECT)
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, blank=True)
     priority = models.ForeignKey('Priority', on_delete=models.SET_DEFAULT, default=1)
     due_date = models.DateTimeField(default=django.utils.timezone.now)
     assigned_to = models.ManyToManyField('Contact', symmetrical=False, related_name='assigned_to')
