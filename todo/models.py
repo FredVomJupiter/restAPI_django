@@ -58,7 +58,7 @@ class Todo(models.Model):
     priority = models.ForeignKey('Priority', on_delete=models.SET_DEFAULT, default=1)
     due_date = models.DateTimeField(default=django.utils.timezone.now)
     assigned_to = models.ManyToManyField('Contact', symmetrical=False, related_name='assigned_to')
-    subtask = models.ManyToManyField('Subtask', symmetrical=False, related_name='subtask', default=None)
+    subtask = models.ManyToManyField('Subtask', symmetrical=False, related_name='subtask', blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
