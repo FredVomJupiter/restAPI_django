@@ -34,12 +34,18 @@ class PrioritySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TodoSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer()
-    category = CategorySerializer()
-    assigned_to = ContactSerializer( many=True)
-    subtask = SubtaskSerializer( many=True)
-    priority = PrioritySerializer()
+    user = UserSerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    assigned_to = ContactSerializer(read_only=True, many=True)
+    subtask = SubtaskSerializer(read_only=True, many=True)
+    priority = PrioritySerializer(read_only=True)
 
     class Meta:
         model = Todo
         fields = ['id', 'title', 'description', 'completed', 'created_at', 'user', 'category', 'priority', 'due_date', 'assigned_to', 'subtask']
+    
+    #def create(self, validated_data):
+     #   category_data = validated_data.pop('category')
+      #  category = Category.objects.get(id=category_data.id)
+       # todo = Todo.objects.create(category=category, **validated_data)
+        #return todo
