@@ -46,7 +46,7 @@ class TodoSerializer(serializers.ModelSerializer):
         read_only_fields = ['user', 'created_at']
     
     def create(self, validated_data):
-        subtasks_data = validated_data.pop('subtask', [])
+        subtasks_data = validated_data.pop('subtasks', [])
         assigned_to_data = validated_data.pop('assigned_to', [])
         todo = Todo.objects.create(**validated_data)
 
