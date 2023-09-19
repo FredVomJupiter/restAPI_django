@@ -37,7 +37,7 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     assigned_to = serializers.PrimaryKeyRelatedField(queryset=Contact.objects.all(), many=True)
-    subtask = serializers.PrimaryKeyRelatedField(queryset=Subtask.objects.all(), many=True, blank=True, null=True)
+    subtask = serializers.PrimaryKeyRelatedField(queryset=Subtask.objects.all(), many=True, required=False)
     priority = serializers.PrimaryKeyRelatedField(queryset=Priority.objects.all())
 
     class Meta:
