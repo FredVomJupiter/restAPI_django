@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from todo.models import Category, Contact, Subtask, Todo
-from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer, UserSerializer
+from todo.models import Category, Contact, Todo
+from todo.serializers import CategorySerializer, ContactSerializer, TodoSerializer, UserSerializer
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView 
@@ -77,53 +77,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         queryset = Category.objects.filter(user_id=request.user).order_by('-name')
         serializer = CategorySerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        if instance.user_id != request.user.id:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        if serializer.is_valid():
-            self.perform_update(serializer)
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.user_id != request.user.id:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class SubtaskViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    serializer_class = SubtaskSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Subtask.objects.all().order_by('-title')
-
-
-    def list(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        queryset = Subtask.objects.filter(user_id=request.user).order_by('-title')
-        serializer = SubtaskSerializer(queryset, many=True)
         return Response(serializer.data)
     
 
