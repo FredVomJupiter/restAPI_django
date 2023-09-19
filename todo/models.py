@@ -33,7 +33,7 @@ class Priority(models.Model):
 class Subtask(models.Model):
     title = models.CharField(max_length=100)
     completed = models.BooleanField(default=False)
-    todo = models.ForeignKey('Todo', related_name='all_subtasks', on_delete=models.CASCADE)
+    todo = models.ForeignKey('Todo', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'({self.id}) {self.title}'
