@@ -47,6 +47,7 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         subtasks_data = validated_data.pop('subtask', [])
         assigned_to_data = validated_data.pop('assigned_to', [])
+        print(validated_data)
         todo = Todo.objects.create(**validated_data)
 
         for subtask_data in subtasks_data:
