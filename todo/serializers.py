@@ -17,7 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
-        fields = ['id', 'title', 'completed', 'todo']
+        fields = ['id', 'title', 'completed']
 
 
 class ContactSerializer(serializers.ModelSerializer):
