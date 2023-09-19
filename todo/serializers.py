@@ -50,7 +50,7 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
         todo = Todo.objects.create(**validated_data)
 
         for subtask_data in subtasks_data:
-            Subtask.objects.create(todo=todo, **subtask_data)
+            Subtask.objects.create(**subtask_data)
 
         for contact_id in assigned_to_data:
             todo.assigned_to.add(contact_id)
