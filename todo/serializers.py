@@ -36,7 +36,7 @@ class PrioritySerializer(serializers.HyperlinkedModelSerializer):
 class TodoSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    assigned_to = ContactSerializer(read_only=True, many=True)
+    assigned_to = serializers.PrimaryKeyRelatedField(queryset=Contact.objects.all(), many=True)
     subtask = SubtaskSerializer(read_only=True, many=True)
     priority = PrioritySerializer(read_only=True)
 
