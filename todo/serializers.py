@@ -49,8 +49,13 @@ class TodoSerializer(serializers.ModelSerializer):
         assigned_to_data = validated_data.pop('assigned_to', [])
         todo = Todo.objects.create(**validated_data)
 
+        list_of_subtasks = []
+
         for subtask_data in subtasks_data:
-            Subtask.objects.create(todo=todo, **subtask_data)
+            sub = Subtask.objects.create(todo=todo, **subtask_data)
+            list_of_subtasks.append(sub)
+
+        todo.subtask.set(list_of_subtasks)
 
         for contact_id in assigned_to_data:
             todo.assigned_to.add(contact_id)
