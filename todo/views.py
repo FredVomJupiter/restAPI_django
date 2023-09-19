@@ -25,7 +25,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         # Get all todos for the current user
-        queryset = Todo.objects.filter(user_id=request.user).order_by('-created_at').prefetch_related('subtask')
+        queryset = Todo.objects.filter(user_id=request.user).order_by('-created_at')
         serializer = TodoSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     
