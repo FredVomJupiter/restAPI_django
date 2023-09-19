@@ -37,13 +37,6 @@ class Subtask(models.Model):
 
     def __str__(self):
         return f'({self.id}) {self.title}'
-    
-
-class SubtaskManager(models.Manager):
-    def create(self, title, completed, todo):
-        subtask = self.model(title=title, completed=completed, todo=todo)
-        subtask.save()
-        return subtask
 
 
 class Contact(models.Model):
