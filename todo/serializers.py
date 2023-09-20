@@ -59,7 +59,12 @@ class TodoSerializer(serializers.ModelSerializer):
 
         return todo
     
+
+    def update(self, instance, validated_data):
+
+        return instance
     
+    '''
     def update(self, instance, validated_data):
         subtasks_data = validated_data.pop('subtasks', None)
         assigned_to_data = validated_data.pop('assigned_to', None)
@@ -92,3 +97,4 @@ class TodoSerializer(serializers.ModelSerializer):
                 sub.delete() 
 
         return instance
+    '''
