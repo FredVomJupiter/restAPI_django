@@ -73,7 +73,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
         if subtasks_data:
             for sub_data in subtasks_data:
-                subtask = Subtask.objects.get(pk=sub_data.id)
+                subtask = Subtask.objects.get(pk=sub_data.get('id'))
                 subtask.title = sub_data.get('title', subtask.title)
                 subtask.completed = sub_data.get('completed', subtask.completed)
                 subtask.save()
