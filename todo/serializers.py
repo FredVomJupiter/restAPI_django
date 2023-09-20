@@ -71,18 +71,24 @@ class TodoSerializer(serializers.ModelSerializer):
         instance.due_date = validated_data.get('due_date', instance.due_date)
         instance.save()
 
-        if subtasks_data:
-            for sub_data in subtasks_data:
-                # Getting the id from the subtask object via the sub_data dict
-                id = sub_data.get('id', None)
-                subtask = Subtask.objects.get(id=id)
-                subtask.title = sub_data.get('title', subtask.title)
-                subtask.completed = sub_data.get('completed', subtask.completed)
-                subtask.save()
-
         if assigned_to_data:
             instance.assigned_to.clear()
             for contact_id in assigned_to_data:
                 instance.assigned_to.add(contact_id)
+
+        # Get all subtasks with the todo id
+        relevant_subtasks = Subtask.objects.filter(todo=instance)
+
+        if subtasks_data:
+            for sub in relevant_subtasks:
+                for sub_data in subtasks_data:
+                    if sub.id == sub_data.get('id'):
+                        sub.title = sub_data.get('title', sub.title)
+                        sub.completed = sub_data.get('completed', sub.completed)
+                        sub.save()
+                        break
+        else:
+            for sub in relevant_subtasks:
+                sub.delete() 
 
         return instance
