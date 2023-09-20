@@ -58,3 +58,29 @@ class TodoSerializer(serializers.ModelSerializer):
             todo.assigned_to.add(contact_id)
 
         return todo
+    
+    
+    def update(self, instance, validated_data):
+        subtasks_data = validated_data.pop('subtasks', None)
+        assigned_to_data = validated_data.pop('assigned_to', None)
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.completed = validated_data.get('completed', instance.completed)
+        instance.category = validated_data.get('category', instance.category)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.due_date = validated_data.get('due_date', instance.due_date)
+        instance.save()
+
+        if subtasks_data:
+            for subtask_data in subtasks_data:
+                subtask = Subtask.objects.get(pk=subtask_data['id'])
+                subtask.title = subtask_data.get('title', subtask.title)
+                subtask.completed = subtask_data.get('completed', subtask.completed)
+                subtask.save()
+
+        if assigned_to_data:
+            instance.assigned_to.clear()
+            for contact_id in assigned_to_data:
+                instance.assigned_to.add(contact_id)
+
+        return instance
