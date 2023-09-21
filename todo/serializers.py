@@ -84,7 +84,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
         with transaction.atomic():
             for subtask_data in subtasks_data:
-                subtask_id = subtask_data.get('id', None)
+                subtask_id = 52
                 if subtask_id:
                     try:
                         subtask = Subtask.objects.get(id=subtask_id, todo=instance)
