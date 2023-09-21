@@ -76,18 +76,15 @@ class TodoSerializer(serializers.ModelSerializer):
             for contact_id in assigned_to_data:
                 instance.assigned_to.add(contact_id)
 
-        # Get all subtasks with the todo id
-        relevant_subtasks = Subtask.objects.filter(todo=instance)
-
         if len(subtasks_data) == 0:
-            relevant_subtasks.delete()
+            Subtask.objects.filter(todo=instance).delete()
 
         if subtasks_data:
             for subtask_data in subtasks_data:
-                if not subtask_data.get('id'):
+                if not Subtask.objects.filter(id=subtask_data.get('id')).exists():
                     Subtask.objects.create(todo=instance, **subtask_data)
                 else:
-                    subtask = relevant_subtasks.get(id=subtask_data.get('id'))
+                    subtask = Subtask.objects.filter(id=subtask_data.get('id'))
                     subtask.title = subtask_data.get('title', subtask.title)
                     subtask.completed = subtask_data.get('completed', subtask.completed)
                     subtask.save()
