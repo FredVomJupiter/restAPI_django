@@ -79,7 +79,21 @@ class TodoSerializer(serializers.ModelSerializer):
         # Get all subtasks with the todo id
         relevant_subtasks = Subtask.objects.filter(todo=instance)
 
+        # Case 1: Check if subtasks_data is not None and if the subtasks exists in relevant_subtasks
         if subtasks_data:
+            for sub_data in subtasks_data:
+                for sub in relevant_subtasks:
+                    if sub.id == sub_data.get('id'):
+                        sub.title = sub_data.get('title', sub.title)
+                        sub.completed = sub_data.get('completed', sub.completed)
+                        sub.save()
+                        break
+
+        return instance
+    
+
+    '''
+    if subtasks_data:
             for sub in relevant_subtasks:
                 for sub_data in subtasks_data:
                     # Case 1: Update existing subtasks
@@ -100,5 +114,4 @@ class TodoSerializer(serializers.ModelSerializer):
         else:
             for sub in relevant_subtasks:
                 sub.delete() 
-
-        return instance
+    '''
