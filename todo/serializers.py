@@ -80,7 +80,7 @@ class TodoSerializer(serializers.ModelSerializer):
         relevant_subtasks = Subtask.objects.filter(todo=instance)
 
         if subtasks_data:
-            subtask_ids_from_data = {sub_data.get('id') for sub_data in subtasks_data}
+            subtask_ids_from_data = [item.get('id') for item in subtasks_data if item.get('id') is not None]
     
             # Iterate through relevant_subtasks and update or delete as needed
             for subtask in relevant_subtasks:
