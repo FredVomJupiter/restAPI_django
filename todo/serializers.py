@@ -87,10 +87,10 @@ class TodoSerializer(serializers.ModelSerializer):
                 if subtask.id in subtask_ids_from_data:
                 # Update existing subtask
                     sub_data = next((sub_data for sub_data in subtasks_data if sub_data.get('id') == subtask.id), None)
-                if sub_data:
-                    subtask.title = sub_data.get('title', subtask.title)
-                    subtask.completed = sub_data.get('completed', subtask.completed)
-                    subtask.save()
+                    if sub_data:
+                        subtask.title = sub_data.get('title', subtask.title)
+                        subtask.completed = sub_data.get('completed', subtask.completed)
+                        subtask.save()
             else:
                 # Delete subtask that is no longer present in subtasks_data
                 subtask.delete()
