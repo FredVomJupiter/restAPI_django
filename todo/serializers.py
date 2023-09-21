@@ -79,43 +79,24 @@ class TodoSerializer(serializers.ModelSerializer):
         # Get all subtasks with the todo id
         relevant_subtasks = Subtask.objects.filter(todo=instance)
 
-        # Case 1: Check if subtasks_data is not None and if the subtasks exists in relevant_subtasks
         if subtasks_data:
-            for sub_data in subtasks_data:
-                subtask_id = sub_data.get('id')  # Assuming there's an 'id' field in sub_data
-                try:
-                    subtask = relevant_subtasks.get(id=subtask_id)
+            subtask_ids_from_data = {sub_data.get('id') for sub_data in subtasks_data}
+    
+            # Iterate through relevant_subtasks and update or delete as needed
+            for subtask in relevant_subtasks:
+                if subtask.id in subtask_ids_from_data:
+                # Update existing subtask
+                    sub_data = next((sub_data for sub_data in subtasks_data if sub_data.get('id') == subtask.id), None)
+                if sub_data:
                     subtask.title = sub_data.get('title', subtask.title)
-                    # Update other subtask attributes here as needed
+                    subtask.completed = sub_data.get('completed', subtask.completed)
                     subtask.save()
-                except Subtask.DoesNotExist:
-                    # Handle the case where the subtask with the given ID does not exist
-                    Subtask.objects.create(todo=instance, **sub_data)
-                    pass
+            else:
+                # Delete subtask that is no longer present in subtasks_data
+                subtask.delete()
+
+            for subtask_data in subtasks_data:
+                if subtask_data.get('id') is None:
+                    Subtask.objects.create(todo=instance, **subtask_data)
 
         return instance
-    
-
-    '''
-    if subtasks_data:
-            for sub in relevant_subtasks:
-                for sub_data in subtasks_data:
-                    # Case 1: Update existing subtasks
-                    if sub.id == sub_data.get('id'):
-                        sub.title = sub_data.get('title', sub.title)
-                        sub.completed = sub_data.get('completed', sub.completed)
-                        sub.save()
-                        break
-                    # Case 2: Delete subtasks that are not in the subtasks_data
-                    else:
-                        sub.delete()
-        # Case 3: Create new subtasks
-        elif subtasks_data:
-            for sub_data in subtasks_data:
-                if not relevant_subtasks.contains(sub_data):
-                    Subtask.objects.create(todo=instance, **sub_data)
-        # Case 4: Delete all subtasks if no subtasks are passed
-        else:
-            for sub in relevant_subtasks:
-                sub.delete() 
-    '''
