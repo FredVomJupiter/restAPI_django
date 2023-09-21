@@ -96,4 +96,7 @@ class TodoSerializer(serializers.ModelSerializer):
                 else:
                     Subtask.objects.create(todo=instance, **subtask_data)
 
+        subtask_ids_in_request = [subtask_data.get('id', None) for subtask_data in subtasks_data]
+        instance.subtasks.exclude(pk__in=subtask_ids_in_request).delete()
+
         return instance
