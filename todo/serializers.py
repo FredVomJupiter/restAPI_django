@@ -82,6 +82,8 @@ class TodoSerializer(serializers.ModelSerializer):
         if len(subtasks_data) == 0:
             queryset.delete()
 
+        keep_subtasks = []
+
         with transaction.atomic():
             for subtask_data in subtasks_data:
                 if 'id' in subtask_data.keys():
@@ -94,6 +96,11 @@ class TodoSerializer(serializers.ModelSerializer):
                         except Subtask.DoesNotExist:
                             pass
                 else:
-                    Subtask.objects.create(todo=instance, **subtask_data)
+                    sub = Subtask.objects.create(todo=instance, **subtask_data)
+                    keep_subtasks.append(sub.id)
+
+        for subtask in queryset:
+            if subtask.id not in keep_subtasks:
+                subtask.delete()
 
         return instance
