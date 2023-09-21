@@ -61,11 +61,6 @@ class TodoSerializer(serializers.ModelSerializer):
     
 
     def update(self, instance, validated_data):
-
-        return instance
-    
-    '''
-    def update(self, instance, validated_data):
         subtasks_data = validated_data.pop('subtasks', None)
         assigned_to_data = validated_data.pop('assigned_to', None)
         instance.title = validated_data.get('title', instance.title)
@@ -87,14 +82,23 @@ class TodoSerializer(serializers.ModelSerializer):
         if subtasks_data:
             for sub in relevant_subtasks:
                 for sub_data in subtasks_data:
+                    # Case 1: Update existing subtasks
                     if sub.id == sub_data.get('id'):
                         sub.title = sub_data.get('title', sub.title)
                         sub.completed = sub_data.get('completed', sub.completed)
                         sub.save()
                         break
+                    # Case 2: Delete subtasks that are not in the subtasks_data
+                    else:
+                        sub.delete()
+        # Case 3: Create new subtasks
+        elif subtasks_data:
+            for sub_data in subtasks_data:
+                if not relevant_subtasks.contains(sub_data):
+                    Subtask.objects.create(todo=instance, **sub_data)
+        # Case 4: Delete all subtasks if no subtasks are passed
         else:
             for sub in relevant_subtasks:
                 sub.delete() 
 
         return instance
-    '''
