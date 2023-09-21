@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Category, Contact, Priority, Subtask, Todo
+from django.db import transaction
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,15 +82,18 @@ class TodoSerializer(serializers.ModelSerializer):
         if len(subtasks_data) == 0:
             queryset.delete()
 
-        if subtasks_data:
+        with transaction.atomic():
             for subtask_data in subtasks_data:
-                if Subtask.objects.get(pk=subtask_data.get('id'), todo=instance).exists():
-                    subtask = Subtask.objects.get(pk=subtask_data.get('id'), todo=instance)
-                    subtask.title = subtask_data.get('title', subtask.title)
-                    subtask.completed = subtask_data.get('completed', subtask.completed)
-                    subtask.save()
+                subtask_id = subtask_data.get('id', None)
+                if subtask_id:
+                    try:
+                        subtask = Subtask.objects.get(pk=subtask_id, todo=instance)
+                        subtask.title = subtask_data.get('title', subtask.title)
+                        subtask.completed = subtask_data.get('completed', subtask.completed)
+                        subtask.save()
+                    except Subtask.DoesNotExist:
+                        pass
                 else:
                     Subtask.objects.create(todo=instance, **subtask_data)
-                    
 
         return instance
