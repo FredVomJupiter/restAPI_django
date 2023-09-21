@@ -79,7 +79,7 @@ class TodoSerializer(serializers.ModelSerializer):
         # Get all subtasks with the todo id
         relevant_subtasks = Subtask.objects.filter(todo=instance)
 
-        if subtasks_data.length == 0:
+        if len(subtasks_data) == 0:
             relevant_subtasks.delete()
 
         if subtasks_data:
