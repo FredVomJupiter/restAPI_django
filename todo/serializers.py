@@ -83,8 +83,8 @@ class TodoSerializer(serializers.ModelSerializer):
 
         if subtasks_data:
             for subtask_data in subtasks_data:
-                if Subtask.objects.filter(pk=subtask_data.get('id')).exists():
-                    subtask = Subtask.objects.filter(pk=subtask_data.get('id'))
+                if Subtask.objects.get(pk=subtask_data.get('id'), todo=instance).exists():
+                    subtask = Subtask.objects.get(pk=subtask_data.get('id'), todo=instance)
                     subtask.title = subtask_data.get('title', subtask.title)
                     subtask.completed = subtask_data.get('completed', subtask.completed)
                     subtask.save()
