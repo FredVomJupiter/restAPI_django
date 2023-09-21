@@ -87,7 +87,7 @@ class TodoSerializer(serializers.ModelSerializer):
                 subtask_id = subtask_data.get('id', None)
                 if subtask_id:
                     try:
-                        subtask = Subtask.objects.get(pk=subtask_id, todo=instance)
+                        subtask = Subtask.objects.get(id=subtask_id, todo=instance)
                         subtask.title = subtask_data.get('title', subtask.title)
                         subtask.completed = subtask_data.get('completed', subtask.completed)
                         subtask.save()
@@ -95,8 +95,5 @@ class TodoSerializer(serializers.ModelSerializer):
                         pass
                 else:
                     Subtask.objects.create(todo=instance, **subtask_data)
-
-        subtask_ids_in_request = [subtask_data.get('id', None) for subtask_data in subtasks_data]
-        instance.subtasks.exclude(pk__in=subtask_ids_in_request).delete()
 
         return instance
