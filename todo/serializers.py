@@ -82,12 +82,16 @@ class TodoSerializer(serializers.ModelSerializer):
         # Case 1: Check if subtasks_data is not None and if the subtasks exists in relevant_subtasks
         if subtasks_data:
             for sub_data in subtasks_data:
-                for sub in relevant_subtasks:
-                    if sub.id == sub_data.get('id'):
-                        sub.title = sub_data.get('title')
-                        sub.completed = sub_data.get('completed')
-                        sub.save()
-                        break
+                subtask_id = sub_data.get('id')  # Assuming there's an 'id' field in sub_data
+                try:
+                    subtask = relevant_subtasks.get(id=subtask_id)
+                    subtask.title = sub_data.get('title', subtask.title)
+                    # Update other subtask attributes here as needed
+                    subtask.save()
+                except Subtask.DoesNotExist:
+                    # Handle the case where the subtask with the given ID does not exist
+                    Subtask.objects.create(todo=instance, **sub_data)
+                    pass
 
         return instance
     
