@@ -87,19 +87,9 @@ class TodoSerializer(serializers.ModelSerializer):
 
         with transaction.atomic():
             for subtask_data in subtasks_data:
-                # if the subtask has an id:
-                if subtask_data.get('id'):
-                    if Subtask.objects.filter(id=subtask_data.get('id')).exists():
-                        try:
-                            subtask = Subtask.objects.get(id=subtask_data.get('id'), todo=instance)
-                            subtask.title = subtask_data.get('title', subtask.title)
-                            subtask.completed = subtask_data.get('completed', subtask.completed)
-                            subtask.save()
-                        except Subtask.DoesNotExist:
-                            pass
-                else:
-                    sub = Subtask.objects.create(todo=instance, **subtask_data)
-                    keep_subtasks.append(sub.id)
+                # Always create a new subtask for all subtasks_data
+                sub = Subtask.objects.create(todo=instance, **subtask_data)
+                keep_subtasks.append(sub.id)
 
         for subtask in queryset:
             if subtask.id not in keep_subtasks:
