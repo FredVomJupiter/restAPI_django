@@ -87,7 +87,8 @@ class TodoSerializer(serializers.ModelSerializer):
 
         with transaction.atomic():
             for subtask_data in subtasks_data:
-                if 'id' in json.loads(subtask_data):
+                # if the subtask has an id:
+                if subtask_data.get('id'):
                     if Subtask.objects.filter(id=subtask_data.get('id')).exists():
                         try:
                             subtask = Subtask.objects.get(id=subtask_data.get('id'), todo=instance)
