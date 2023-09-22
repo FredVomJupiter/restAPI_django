@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Category, Contact, Priority, Subtask, Todo
@@ -86,10 +87,10 @@ class TodoSerializer(serializers.ModelSerializer):
 
         with transaction.atomic():
             for subtask_data in subtasks_data:
-                if 'id' in subtask_data.keys():
-                    if Subtask.objects.filter(id=subtask_data['id']).exists():
+                if 'id' in json.loads(subtask_data):
+                    if Subtask.objects.filter(id=subtask_data.get('id')).exists():
                         try:
-                            subtask = Subtask.objects.get(id=subtask_data['id'], todo=instance)
+                            subtask = Subtask.objects.get(id=subtask_data.get('id'), todo=instance)
                             subtask.title = subtask_data.get('title', subtask.title)
                             subtask.completed = subtask_data.get('completed', subtask.completed)
                             subtask.save()
