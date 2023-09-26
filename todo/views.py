@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from todo.models import Category, Contact, Todo
-from todo.serializers import CategorySerializer, ContactSerializer, TodoSerializer, UserSerializer
+from todo.models import Category, Contact, Subtask, Todo
+from todo.serializers import CategorySerializer, ContactSerializer, SubtaskSerializer, TodoSerializer, UserSerializer
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView 
@@ -32,28 +32,43 @@ class TodoViewSet(viewsets.ModelViewSet):
 
     # Crud to create a todo
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = TodoSerializer(data=request.data)
         if serializer.is_valid():
+            serializer.save(user=self.request.user)
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def perform_create(self, validated_data):
+        assigned_to_data = validated_data.pop('assigned_to', None)
+        todo = Todo.objects.create(**validated_data)
 
+        for contact_id in assigned_to_data:
+            todo.assigned_to.add(contact_id)
 
+    
     # crUd to update a todo
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         if instance.user_id != request.user.id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = TodoSerializer(instance, data=request.data, partial=partial)
         if serializer.is_valid():
             self.perform_update(serializer)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def perform_update(self, serializer):
+        assigned_to_data = serializer.validated_data.pop('assigned_to', None)
+        instance = serializer.save()
+
+        if assigned_to_data:
+            instance.assigned_to.clear()
+            for contact_id in assigned_to_data:
+                instance.assigned_to.add(contact_id)
     
 
     # cruD to delete a todo
@@ -157,7 +172,52 @@ class ContactViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
-   
+
+
+class SubtaskViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    serializer_class = SubtaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Subtask.objects.all().order_by('-title')
+
+
+    def list(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        queryset = Subtask.objects.filter(user_id=request.user).order_by('-title')
+        serializer = SubtaskSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+
+    def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def update(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class LoginView(ObtainAuthToken):
     # API endpoint that allows users to login and receive a token.
