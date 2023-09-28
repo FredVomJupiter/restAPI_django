@@ -18,7 +18,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
-        fields = ['id', 'title', 'completed', 'todo', 'user']
+        fields = ['id', 'title', 'completed', 'todo']
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -38,7 +38,7 @@ class TodoSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     assigned_to = serializers.PrimaryKeyRelatedField(queryset=Contact.objects.all(), many=True)
-    subtasks = serializers.PrimaryKeyRelatedField(queryset=Subtask.objects.all(), many=True, required=False)
+    subtasks = serializers.PrimaryKeyRelatedField(queryset=Subtask.objects.all(), many=True)
     priority = serializers.PrimaryKeyRelatedField(queryset=Priority.objects.all())
 
     class Meta:

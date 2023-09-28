@@ -32,20 +32,24 @@ class TodoViewSet(viewsets.ModelViewSet):
 
     # Crud to create a todo
     def create(self, request, *args, **kwargs):
+        print(request.data)
         serializer = TodoSerializer(data=request.data)
         if serializer.is_valid():
+            subtasks_data = serializer.validated_data.pop('subtasks', [])
+            assigned_to_data = serializer.validated_data.pop('assigned_to', [])
             serializer.save(user=self.request.user)
-            self.perform_create(serializer)
+            todo = serializer.instance
+
+            for contact_id in assigned_to_data:
+                todo.assigned_to.add(contact_id)
+        
+            for sub in subtasks_data:
+                subtask = Subtask.objects.get(id=sub.id)
+                subtask.todo = todo
+                subtask.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-    def perform_create(self, validated_data):
-        assigned_to_data = validated_data.pop('assigned_to', None)
-        todo = Todo.objects.create(**validated_data)
-
-        for contact_id in assigned_to_data:
-            todo.assigned_to.add(contact_id)
 
     
     # crUd to update a todo
@@ -194,6 +198,7 @@ class SubtaskViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
+            serializer.save(user=self.request.user)
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
