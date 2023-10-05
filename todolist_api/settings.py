@@ -29,13 +29,15 @@ ALLOWED_HOSTS = [
     'frederi1c.pythonanywhere.com',
     'localhost',
     '127.0.0.1',
+    'https://frederi1c.pythonanywhere.com/login/'
     ]
 
 # CORS settings
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:4200',
-    'https://api.frederic-rieg.de'
+    'https://api.frederic-rieg.de',
+    'https://www.api.frederic-rieg.de/login'
     ]
 
 
