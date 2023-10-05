@@ -32,7 +32,6 @@ class TodoViewSet(viewsets.ModelViewSet):
 
     # Crud to create a todo
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = TodoSerializer(data=request.data)
         if serializer.is_valid():
             subtasks_data = serializer.validated_data.pop('subtasks', [])
