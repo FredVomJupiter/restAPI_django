@@ -36,8 +36,12 @@ ALLOWED_HOSTS = [
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:4200',
+    '127.0.0.1:5500/login/',
+    'http://localhost:5500/login/',
     'https://api.frederic-rieg.de',
-    'https://www.api.frederic-rieg.de/login'
+    'https://www.api.frederic-rieg.de/login',
+    'https://www.join.frederic-rieg.de',
+    'https://join.frederic-rieg.de',
     ]
 
 

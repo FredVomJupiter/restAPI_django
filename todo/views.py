@@ -25,7 +25,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         # Get all todos for the current user
-        queryset = Todo.objects.filter(user_id=request.user).order_by('-created_at')
+        queryset = Todo.objects.order_by('-created_at')
         serializer = TodoSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     
@@ -140,7 +140,7 @@ class ContactViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        queryset = Contact.objects.filter(user_id=request.user).order_by('-name')
+        queryset = Contact.objects.order_by('-name')
         serializer = ContactSerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -187,7 +187,7 @@ class SubtaskViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        queryset = Subtask.objects.filter(user_id=request.user).order_by('-title')
+        queryset = Subtask.objects.order_by('-title')
         serializer = SubtaskSerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -235,6 +235,16 @@ class LoginView(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+    
+
+class LogoutView(APIView):
+    # API endpoint that allows users to logout.
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        request.user.auth_token.delete()
+        return Response(data={'message': 'Logout successful'}, status=status.HTTP_200_OK)
     
 
 class LoggedUserView(APIView):

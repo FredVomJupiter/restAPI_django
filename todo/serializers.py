@@ -1,7 +1,7 @@
 import json
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Category, Contact, Priority, Subtask, Todo
+from .models import Category, Completed, Contact, Priority, Subtask, Todo
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,12 +25,18 @@ class ContactSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Contact
-        fields = ['id', 'name', 'email', 'phone', 'user']
+        fields = ['id', 'name', 'email', 'phone', 'user', 'color']
 
 
 class PrioritySerializer(serializers.ModelSerializer):
     class Meta:
         model = Priority
+        fields = ['id', 'name']
+
+
+class CompletedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Completed
         fields = ['id', 'name']
 
 
