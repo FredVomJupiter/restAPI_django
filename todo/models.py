@@ -9,46 +9,6 @@ class Category(models.Model):
 
     def __str__(self):
         return f'({self.id}) {self.name}'
-    
-
-class Completed(models.Model):
-    Todo = 'Todo'
-    InProgress = 'In Progress'
-    AwaitingFeedback = 'Awaiting Feedback'
-    Done = 'Done'
-
-    COMPLETED = {
-        (Todo, 'Todo'),
-        (InProgress, 'In Progress'),
-        (AwaitingFeedback, 'Awaiting Feedback'),
-        (Done, 'Done'),
-    }
-
-    name = models.CharField(max_length=100,
-                            choices=COMPLETED,
-                            default=Todo)
-
-    def __str__(self):
-        return f'({self.id}) {self.name}'
-
-
-class Priority(models.Model):
-    Low = 'Low'
-    Medium = 'Medium'
-    High = 'High'
-
-    PRIORITIES = {
-        (Low, 'Low'),
-        (Medium, 'Medium'),
-        (High, 'High'),
-    }
-
-    name = models.CharField(max_length=6,
-                            choices=PRIORITIES,
-                            default=Low)
-
-    def __str__(self):
-        return f'({self.id}) {self.name}'
 
 
 class Contact(models.Model):
@@ -63,12 +23,26 @@ class Contact(models.Model):
 
 
 class Todo(models.Model):
+
+    COMPLETED = (
+        ('Todo', 'Todo'),
+        ('InProgress', 'In Progress'),
+        ('AwaitingFeedback', 'Awaiting Feedback'),
+        ('Done', 'Done')
+    )
+
+    PRIORITIES = (
+        ('Low', 'Low'),
+        ('Medium', 'Medium'),
+        ('High', 'High'),
+    )
+
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=500)
-    completed = models.ForeignKey(Completed, on_delete=models.SET_DEFAULT, default=1)
+    status = models.CharField(max_length=20, choices=COMPLETED, default='Todo')
     created_at = models.DateTimeField(default=django.utils.timezone.now)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=3)
-    priority = models.ForeignKey(Priority, on_delete=models.SET_DEFAULT, default=1)
+    priority = models.CharField(max_length=6, choices=PRIORITIES, default='Low')
     due_date = models.DateTimeField(default=django.utils.timezone.now)
     assigned_to = models.ManyToManyField(Contact, symmetrical=False, related_name='assigned_to')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
