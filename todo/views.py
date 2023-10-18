@@ -239,11 +239,15 @@ class LoginView(ObtainAuthToken):
 
 class LogoutView(APIView):
     # API endpoint that allows users to logout.
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
-        request.user.auth_token.delete()
+        try:
+            print(request)
+            request.user.auth_token.delete()
+        except Token.DoesNotExist:
+            pass  # Token does not exist, so proceed without deleting
         return Response(data={'message': 'Logout successful'}, status=status.HTTP_200_OK)
     
 
