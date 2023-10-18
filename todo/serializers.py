@@ -6,7 +6,8 @@ from .models import Category, Contact, Subtask, Todo
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'password', 'email']
+        extra_kwargs = {'password':{'write_only':True}}
 
 
 class CategorySerializer(serializers.ModelSerializer):
