@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from todo.views import CategoryViewSet, ContactViewSet, LoggedUserView, LoginView, LogoutView, SubtaskViewSet, TodoViewSet
+from todo.views import CategoryViewSet, ContactViewSet, LoggedUserView, LoginView, LogoutView, RegisterView, SubtaskViewSet, TodoViewSet
 
 router = routers.DefaultRouter()
 router.register(r'v1/todos', TodoViewSet, basename='todos')
@@ -16,4 +16,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('api/', include(router.urls)),
     path('api/v1/user/', LoggedUserView.as_view()),
+    path('register-account/', RegisterView.as_view())
 ]
