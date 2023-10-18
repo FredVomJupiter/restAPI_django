@@ -244,7 +244,6 @@ class LogoutView(APIView):
 
     def post(self, request, format=None):
         try:
-            print(request)
             request.user.auth_token.delete()
         except Token.DoesNotExist:
             pass  # Token does not exist, so proceed without deleting
