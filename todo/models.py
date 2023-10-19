@@ -26,8 +26,8 @@ class Todo(models.Model):
 
     COMPLETED = (
         ('Todo', 'Todo'),
-        ('InProgress', 'In Progress'),
-        ('AwaitingFeedback', 'Awaiting Feedback'),
+        ('In Progress', 'In Progress'),
+        ('Awaiting Feedback', 'Awaiting Feedback'),
         ('Done', 'Done')
     )
 
