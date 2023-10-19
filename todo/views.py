@@ -9,12 +9,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 
 
 class TodoViewSet(viewsets.ModelViewSet):
     # API endpoint that allows todos to be viewed or edited.
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Todo.objects.all().order_by('-created_at')
@@ -85,7 +85,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Category.objects.all().order_by('-name')
@@ -94,7 +94,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        queryset = Category.objects.filter(user_id=request.user).order_by('-name')
+        queryset = Category.objects.order_by('-name')
         serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -132,7 +132,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ContactViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     serializer_class = ContactSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Contact.objects.all().order_by('-name')
@@ -179,7 +179,7 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 
 class SubtaskViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     serializer_class = SubtaskSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Subtask.objects.all().order_by('-title')
@@ -253,7 +253,7 @@ class LogoutView(APIView):
 
 class LoggedUserView(APIView):
     # API endpoint that allows users to get their own data.
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
