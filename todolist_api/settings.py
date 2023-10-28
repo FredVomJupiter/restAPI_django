@@ -37,16 +37,16 @@ ALLOWED_HOSTS = [
     ]
 
 # CORS settings
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_HEADERS = (
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-)
+#CORS_ALLOW_HEADERS = (
+#    "accept",
+#    "authorization",
+#    "content-type",
+#    "user-agent",
+#    "x-csrftoken",
+#    "x-requested-with",
+#)
 
 CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1:5500/login/',
@@ -55,12 +55,14 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.join.frederic-rieg.de',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    '127.0.0.1:5500/login/',
-    'http://127.0.0.1:5500',
-    'https://api.frederic-rieg.de',
-    'https://www.join.frederic-rieg.de',
-]
+#CORS_ALLOWED_ORIGINS = [
+#    '127.0.0.1:5500/login/',
+#    'http://127.0.0.1:5500',
+#    'https://api.frederic-rieg.de',
+#    'https://www.join.frederic-rieg.de',
+#]
+
+#CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
