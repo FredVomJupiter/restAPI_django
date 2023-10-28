@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from todo.views import CategoryViewSet, ContactViewSet, LoggedUserView, LoginView, LogoutView, RegisterView, SubtaskViewSet, TodoViewSet, VerifyView
+from todo.views import CategoryViewSet, ContactViewSet, DeleteAccountView, LoggedUserView, LoginView, LogoutView, RegisterView, SubtaskViewSet, TodoViewSet, VerifyView
 from django.contrib.auth import views as auth_views
 
 router = routers.DefaultRouter()
@@ -23,4 +23,5 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
     path('verify/<str:token>/', VerifyView.as_view(), name='verify_email'),
+    path('api/v1/delete-account/<int:pk>', DeleteAccountView.as_view(), name='delete_account'),
 ]
