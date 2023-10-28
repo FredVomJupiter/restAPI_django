@@ -46,6 +46,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
     'https://www.api.frederic-rieg.de/login',
+    'https://api.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
     'https://join.frederic-rieg.de',
     ]
