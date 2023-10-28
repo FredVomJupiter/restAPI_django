@@ -82,7 +82,7 @@ ROOT_URLCONF = 'todolist_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'todo/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,6 +94,10 @@ TEMPLATES = [
         },
     },
 ]
+
+STATIC_URL = BASE_DIR / 'todo/static/'
+
+STATICFILES_DIRS = [ STATIC_URL / 'css']
 
 WSGI_APPLICATION = 'todolist_api.wsgi.application'
 
