@@ -32,26 +32,26 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'frederi1c.pythonanywhere.com',
-    'localhost',
     '127.0.0.1',
-    'https://frederi1c.pythonanywhere.com/login/'
+    'https://frederi1c.pythonanywhere.com/'
     ]
 
 # CORS settings
+CORS_ORIGIN_ALLOW_ALL = False
+
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://localhost:4200',
     '127.0.0.1:5500/login/',
-    'http://localhost:5500/login/',
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
-    'https://www.api.frederic-rieg.de/login',
-    'https://api.frederic-rieg.de/dashboard',
     'https://www.join.frederic-rieg.de',
-    'https://join.frederic-rieg.de',
     ]
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:5500']
+CSRF_TRUSTED_ORIGINS = [
+    '127.0.0.1:5500/login/',
+    'http://127.0.0.1:5500',
+    'https://api.frederic-rieg.de',
+    'https://www.join.frederic-rieg.de',
+    ]
 
 # Application definition
 
