@@ -1,3 +1,4 @@
+from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
@@ -10,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+
+from django.core.mail import EmailMessage
 
 
 class TodoViewSet(viewsets.ModelViewSet):
@@ -273,5 +276,36 @@ class RegisterView(APIView):
             if User.objects.filter(email=serializer.validated_data['email']).exists():
                 return Response(data={'message': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
+            # Send verification email
+            user = User.objects.get(email=serializer.validated_data['email'])
+            user.is_active = False
+            user.save()
+            token, created = Token.objects.get_or_create(user=user)
+            email = EmailMessage(
+                'Verify your account',
+                'Click the link below to verify your account:\n\nhttp://127.0.0.1:8000/verify/' + token.key,
+                to=[serializer.validated_data['email']]
+            )
+            email.send()
             return Response(data={'message': 'Registration successful'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class VerifyView(APIView):
+    # API endpoint that allows users to verify their account.
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        if not Token.objects.filter(key=kwargs['token']).exists():
+            # token does not exist
+            response = TemplateResponse(request, 'verification_failed.html')
+            return response
+        token = Token.objects.get(key=kwargs['token'])
+        user = User.objects.get(id=token.user_id)
+        user.is_active = True
+        user.save()
+        # delete token
+        token.delete()
+        response = TemplateResponse(request, 'verify_email.html')
+        return response

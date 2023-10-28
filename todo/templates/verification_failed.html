@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification failed</title>
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'logo_white.svg' %}">
+    <link rel="stylesheet" href="{% static 'general.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    
+</head>
+
+<body>
+    <div class="background">
+
+        <img class="logo" src="{% static 'logo_black.svg' %}">
+
+        <main>
+
+            <div class="flex-column flex-center card gap-25 padding-20">
+
+                <div class="flex-column flex-center gap-10">
+                    <span class="title-medium color-primary max-width-200 text-center">Oops!</span>
+                    <div class="blueline"></div>
+                </div>
+
+                <span class="text-normal max-width-200 text-center">Your account is already verified or the verification link is invalid.
+                </span>
+
+                <a href="http://127.0.0.1:5500/login.html">Go to Login</a>
+
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>
