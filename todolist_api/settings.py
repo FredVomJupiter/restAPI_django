@@ -60,7 +60,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://www.join.frederic-rieg.de',
 ]
 
-#CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
