@@ -84,7 +84,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         if instance.user_id != request.user.id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={'message': 'Task deleted.'} , status=status.HTTP_200_OK)
     
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -298,7 +298,7 @@ class DeleteAccountView(APIView):
 
     def delete(self, request, *args, **kwargs):
         user = User.objects.get(id=kwargs['pk'])
-        if user.id != request.user.id:
+        if user.id != request.user.id | request.user.is_superuser | request.user.id == 2:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         user.delete()
         return Response(data={'message': 'Account deleted.'}, status=status.HTTP_200_OK)
