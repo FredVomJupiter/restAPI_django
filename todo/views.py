@@ -269,6 +269,9 @@ class RegisterView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
+            # No douplicat email
+            if User.objects.filter(email=serializer.validated_data['email']).exists():
+                return Response(data={'message': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(data={'message': 'Registration successful'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
