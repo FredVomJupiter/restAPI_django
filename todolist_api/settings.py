@@ -44,15 +44,21 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
-    ]
+]
 
 CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1:5500/login/',
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
-    ]
+]
 
+CORS_ALLOWED_ORIGINS = [
+    '127.0.0.1:5500/login/',
+    'http://127.0.0.1:5500',
+    'https://api.frederic-rieg.de',
+    'https://www.join.frederic-rieg.de',
+]
 # Application definition
 
 INSTALLED_APPS = [
