@@ -291,6 +291,19 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+class DeleteAccountView(APIView):
+    # API endpoint that allows users to delete their account.
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        user = User.objects.get(id=kwargs['pk'])
+        if user.id != request.user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user.delete()
+        return Response(data={'message': 'Account deleted.'}, status=status.HTTP_200_OK)
+    
+
 class VerifyView(APIView):
     # API endpoint that allows users to verify their account.
     authentication_classes = [TokenAuthentication]
