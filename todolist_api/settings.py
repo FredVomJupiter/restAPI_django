@@ -39,25 +39,18 @@ ALLOWED_HOSTS = [
 # CORS settings
 CORS_ORIGIN_ALLOW_ALL = False
 
-#CORS_ALLOW_HEADERS = (
-#    "accept",
-#    "authorization",
-#    "content-type",
-#    "user-agent",
-#    "x-csrftoken",
-#    "x-requested-with",
-#)
-
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
+    'https://frederi1c.pythonanywhere.com/'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
     'https://api.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
+    'https://frederi1c.pythonanywhere.com/'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
