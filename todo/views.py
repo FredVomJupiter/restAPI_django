@@ -283,7 +283,7 @@ class RegisterView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             email = EmailMessage(
                 'Verify your account',
-                'Click the link below to verify your account:\n\nhttp://127.0.0.1:8000/verify/' + token.key,
+                'Click the link below to verify your account:\n\nhttps://frederi1c.pythonanywhere.com/verify/' + token.key,
                 to=[serializer.validated_data['email']]
             )
             email.send()
