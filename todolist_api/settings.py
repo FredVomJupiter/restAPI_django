@@ -151,7 +151,7 @@ STATIC_URL = BASE_DIR / 'todo/static/'
 
 STATICFILES_DIRS = [ STATIC_URL / 'css']
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'static/api'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
