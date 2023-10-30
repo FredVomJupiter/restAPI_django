@@ -1,7 +1,13 @@
-# restAPI_django
+# Backend for JOIN Kanban Management Tool
 
+## Restfull API connections
 
-GuestLogin:
+### Registration of new accounts with Email-Verification link for activation
 
-Guest
-8j)'Ga_Kw?YwPbt
+### Reset of password via Email
+
+### Deleting your own Account is possible
+
+### Access restriction: you can only delete/update your own Contacts & Todos
+
+### Authentication with Username & Password and Tokens
