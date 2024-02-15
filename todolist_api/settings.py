@@ -41,13 +41,11 @@ CORS_ORIGIN_ALLOW_ALL = False
 CSRF_TRUSTED_ORIGINS = [
     'https://join.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
-    'https://frederi1c.pythonanywhere.com/'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'https://join.frederic-rieg.de',
     'https://www.join.frederic-rieg.de',
-    'https://frederi1c.pythonanywhere.com/'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
